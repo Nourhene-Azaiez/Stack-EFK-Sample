@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y build-essential jq docker.io
 RUN gem install elasticsearch -v 8.8.0
 RUN gem install fluent-plugin-elasticsearch
 
-COPY fluent/dockercmd.sh /usr/local/bin/dockercmd.sh
+COPY dockercmd.sh /usr/local/bin/dockercmd.sh
 RUN chmod +x /usr/local/bin/dockercmd.sh
 
-COPY fluent/conf/fluent.conf /fluentd/etc/
+COPY conf/fluent.conf /fluentd/etc/
 RUN fluentd -c /fluentd/etc/fluent.conf &
