@@ -1,0 +1,156 @@
+secrets:
+  postgres_user:
+    file: ./secrets/postgres_user.txt
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+
+services:
+  nginx:
+    restart: always
+    build: ./nginx
+    ports: 
+      - "80:80"
+    volumes:
+      - ./web/static:/static
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.nginx
+    links:
+      - fluentd
+      - web:web
+    networks:
+      - app
+
+  web:
+    restart: always
+    build: ./web
+    links:
+      - postgres:postgres
+      - fluentd
+    secrets:
+      - postgres_user
+      - postgres_password
+    environment:
+      DEBUG: False
+      POSTGRES_DB: db
+      DATABASE_PORT: 5432
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    expose:
+      - "8000"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.web
+    depends_on:
+      - postgres
+    networks:
+      - app
+    command: >
+      sh -c "python3 ./create_db.py &&
+             gunicorn -w 2 -b :8000 app:app"
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - db-data:/var/lib/postgresql
+    secrets:
+      - postgres_user
+      - postgres_password
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    expose:
+      - "5432"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.postgres
+    links:
+      - fluentd
+    networks:
+      - app
+  
+  log-generator:
+    container_name: logger
+    build:
+      context: .
+      dockerfile: log-generator/Dockerfile
+    restart: always
+    user: root
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.logger
+    links:
+      - fluentd
+    networks:
+      - app
+  
+  fluentd:
+    container_name: fluentd
+    build: ./fluent
+    restart: always
+    ports: 
+      - 24224:24224
+      - 24224:24224/udp
+    expose:
+      - "24224"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    networks:
+      - efk
+      - app
+
+  elasticsearch:
+    container_name: elasticsearch              
+    image: bitnami/elasticsearch:8.8.2
+    ports: 
+      - 9200:9200
+    expose:
+      - "9200"
+    networks:
+      - efk
+    volumes:
+      - esdata:/usr/share/elasticsearch/data:rw
+
+  kibana:
+    container_name: kibana
+    build: ./kibana
+    restart: always
+    ports: 
+      - 5601:5601
+    expose:
+      - "5601"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.kibana
+    depends_on:
+      - elasticsearch
+      - fluentd
+    links:
+      - elasticsearch
+    networks:
+      - efk
+
+volumes:
+  db-data:
+  esdata:
+networks:
+  efk:
+   driver: bridge
+  app:
+   driver: bridge
