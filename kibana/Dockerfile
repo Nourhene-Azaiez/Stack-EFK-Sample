@@ -1,13 +1,12 @@
+# Use the official Kibana image as a base
 FROM bitnami/kibana:8.8.2
 
-USER root
-
-COPY kibana.yml /opt/bitnami/kibana/config/kibana.yml
-
+# Copy the import script and export file into the container
+COPY import.sh /usr/share/kibana/import.sh
 COPY export.ndjson /usr/share/kibana/export.ndjson
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN chmod +x /usr/local/bin/entrypoint.sh
+USER root
+RUN chmod +x /usr/share/kibana/import.sh
 
-# Use ENTRYPOINT to handle starting Kibana and running the import script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Run the import script when the container starts
+CMD ["/usr/share/kibana/import.sh"]

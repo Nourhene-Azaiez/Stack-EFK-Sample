@@ -127,6 +127,7 @@ services:
 
   kibana:
     container_name: kibana
+    # image: bitnami/kibana:8.8.2
     build: ./kibana
     restart: always
     ports: 
@@ -143,6 +144,8 @@ services:
       - fluentd
     links:
       - elasticsearch
+    volumes:
+      - ./kibana/kibana.yml:/opt/bitnami/kibana/config/kibana.yml
     networks:
       - efk
 
