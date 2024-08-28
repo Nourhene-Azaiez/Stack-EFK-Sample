@@ -2,7 +2,7 @@ FROM fluent/fluentd:v1.17.0-debian-1.0
 
 USER root
 
-RUN apt-get update && apt-get install -y build-essential jq docker.io
+RUN apt-get update && apt-get install -y build-essential jq bc docker.io
 RUN gem install elasticsearch -v 8.8.0
 RUN gem install fluent-plugin-elasticsearch
 

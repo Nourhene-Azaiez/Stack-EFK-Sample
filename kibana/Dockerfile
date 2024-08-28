@@ -1,12 +1,19 @@
-# Use the official Kibana image as a base
 FROM bitnami/kibana:8.8.2
 
-# Copy the import script and export file into the container
-COPY import.sh /usr/share/kibana/import.sh
-COPY export.ndjson /usr/share/kibana/export.ndjson
-
 USER root
-RUN chmod +x /usr/share/kibana/import.sh
 
-# Run the import script when the container starts
-CMD ["/usr/share/kibana/import.sh"]
+COPY kibana.yml /opt/bitnami/kibana/config/kibana.yml
+
+COPY export.ndjson /usr/share/kibana/export.ndjson
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+RUN apt-get update && \
+    apt-get install -y nginx
+
+COPY web/front /usr/share/nginx/front
+COPY web/nginx.conf /etc/nginx/nginx.conf
+RUN kibana-keystore create
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

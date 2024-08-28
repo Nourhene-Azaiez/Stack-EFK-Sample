@@ -2,7 +2,7 @@
 FROM ubuntu:latest
 
 # Install Bash and any necessary tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y jq\
     bash \
     && rm -rf /var/lib/apt/lists/*
 

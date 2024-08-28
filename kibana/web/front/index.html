@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Elastic Lens</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">
+            <img src="./img/icon.png" class="logo">
+            <span> Lens Analytics</span>
+        </a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <a class="nav-link" href="index.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                            Description
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Dashboards</div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboards
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a id="link2" class="nav-link" href="#" onclick="showIframe('Service_Log')">Service Logs</a>
+                                <a id="link3" class="nav-link" href="#" onclick="showIframe('serviceHealth')">Service Health</a>
+                                <a id="link4" class="nav-link" href="#" onclick="showIframe('serviceHistory')">Service Health History</a>
+                            </nav>
+                        </div>
+                        <div class="sb-sidenav-menu-heading">Elastic Shortcuts</div>
+                        <a class="nav-link" href="http://localhost:5601/app/management/data/index_management/indices" target="_blank">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div>
+                            Index Management
+                        </a>
+                        <a class="nav-link" href="http://localhost:5601/app/management/kibana/dataViews" target="_blank">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
+                            Data Views
+                        </a>
+                        <a id="link5" class="nav-link" href="#" onclick="showIframe('User')">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                            Profile
+                        </a>
+                        <a class="nav-link" href="http://localhost:5601/app/management" target="_blank">
+                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
+                            Other Settings
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <div class="description-section" id="descriptionSection">
+                <h2>Project Overview</h2>
+                <p>Lens Analytics provides a streamlined approach to monitoring and analyzing your services. This platform integrates with various data sources to deliver real-time insights and analytics through intuitive dashboards.</p>
+                
+                <h3>Project Architecture</h3>
+                <p>The project is structured into several key components:</p>
+                <ul>
+                    <li><strong>Data Collection:</strong> Utilizes Fluentd to gather logs and metrics from various services and applications.</li>
+                    <li><strong>Data Storage:</strong> Elasticsearch serves as the data storage and search engine, providing scalable storage and fast query capabilities.</li>
+                    <li><strong>Data Visualization:</strong> Kibana offers interactive visualizations and dashboards to help users explore and analyze data.</li>
+                    <li><strong>Service Integration:</strong> Docker is used to containerize each component, ensuring consistency across different environments.</li>
+                </ul>
+
+                <h3>How It Works</h3>
+                <p>The workflow involves:</p>
+                <ol>
+                    <li>Collecting logs and metrics from various services.</li>
+                    <li>Sending the collected data to Elasticsearch for indexing and storage.</li>
+                    <li>Visualizing the data using Kibana dashboards and tools.</li>
+                </ol>
+                
+                <h3>Project Benefits</h3>
+                <ul>
+                    <li><strong>Centralized Monitoring:</strong> Provides a single view for monitoring and analyzing service performance and health.</li>
+                    <li><strong>Real-time Insights:</strong> Enables timely detection of issues and trends through real-time data visualization.</li>
+                    <li><strong>Scalability:</strong> Scales seamlessly with increasing data volumes and service complexity.</li>
+                </ul>
+            </div>
+            <iframe id="iframeContent" src="about:blank" title="Content Frame"></iframe>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+</body>
+</html>

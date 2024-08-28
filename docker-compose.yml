@@ -82,7 +82,6 @@ services:
     build:
       context: .
       dockerfile: log-generator/Dockerfile
-    restart: always
     user: root
     logging:
       driver: "fluentd"
@@ -115,9 +114,14 @@ services:
 
   elasticsearch:
     container_name: elasticsearch              
-    image: bitnami/elasticsearch:8.8.2
+    image: elasticsearch:8.8.2
     ports: 
       - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=elastic
+      - KIBANA_PASSWORD=kibanapass
     expose:
       - "9200"
     networks:
@@ -127,13 +131,15 @@ services:
 
   kibana:
     container_name: kibana
-    # image: bitnami/kibana:8.8.2
-    build: ./kibana
+    image: registry.gitlab.tech.orange/win/owf/rfk/efk-config-utils/develop:ed00a1ed
+    # build: ./kibana # used for debuging and testing
     restart: always
     ports: 
       - 5601:5601
+      - 81:81
     expose:
       - "5601"
+      - "81"
     logging:
       driver: fluentd
       options:
@@ -144,8 +150,6 @@ services:
       - fluentd
     links:
       - elasticsearch
-    volumes:
-      - ./kibana/kibana.yml:/opt/bitnami/kibana/config/kibana.yml
     networks:
       - efk
 
@@ -157,3 +161,15 @@ networks:
    driver: bridge
   app:
    driver: bridge
+# docker_networks:
+#   - clusternetwork
+ 
+# docker_healthcheck:
+#   test: ["CMD", "curl", "-f", "http://localhost:5601/status"]
+#   timeout: 2s
+#   retries: 5
+# docker_deploy_replicas: ${DOCKER_DEPLOY_REPLICAS}
+# traefik_enable: false
+# # traefik_path_prefix: /api/v2
+# # traefik_review_path_strip: true
+# # traefik_priority: 99
