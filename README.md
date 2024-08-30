@@ -1,4 +1,4 @@
-# LOGS TRACE ET OPTIMISATION - REFCONTACT-RFK
+# LOGS TRACE ET OPTIMISATION - REFCONTACT-EFK
 
 ## Aperçu du projet
 Le projet REFCONTACT-EFK vise à développer une solution intégrée pour gérer efficacement les logs générés d'une multitude de services interconnectés au sein du projet REFCONTACT. Ces services, qui sont essentiels au fonctionnement global du système, produisent un volume important de données de log, indispensables pour surveiller les performances, diagnostiquer les problèmes, et améliorer continuellement l'ensemble de l'écosystème.
@@ -33,28 +33,40 @@ Fluentd joue un rôle crucial dans cette architecture en tant que collecteur de 
 2. **Stockage de logs (Elasticsearch)** :
 Elasticsearch est utilisé comme un moteur de stockage et de recherche pour les logs.
 
-- Indexation : Les logs sont stockés dans des indices Elasticsearch, qui sont optimisés pour la recherche rapide. 4 index sont créés: 
-    Service Logs:
-    Container_Health_Check:
-    Container_Heath_Check_History:
+- **Indexation** : Les logs sont stockés dans des indices Elasticsearch, qui sont optimisés pour la recherche rapide. Quatre index sont créés: 
+
+    Service Logs: Contient les logs internes aux services.
+
+    Container_Health_Check: Contient les informations docker relatives aux services de façon instantannée; la mise à jour se fait chaque minute.
+
+    Container_Heath_Check_History: Contient l'historique d'informations services pour une meilleure observation des tendances de données collectées.
+
+    Container_logs : est le container qui contient les logs de kibana (c'est un contenaire de test de kibana aucun dashborad n'est lié à cet index; seuls l'index et la data view sont disponibles)
+
 
 
 3. **Visualisation (Kibana)** :
 Kibana fournit une interface utilisateur pour explorer et visualiser les données stockées dans Elasticsearch.
 
-- Tableaux de bord : Création de tableaux de bord personnalisés avec différents types de visualisations (graphiques, métriques, tables, etc.).
-- Recherche et filtrage : Interface pour effectuer des recherches complexes dans les logs.
--vAlerting : Possibilité de configurer des alertes basées sur des conditions spécifiques dans les données de logs.
+    1. Service Logs Dashboard:
+Ce tableau de bord est conçu pour afficher et analyser les logs internes aux services. Il peut inclure plusieurs visualisations qui permettent de filtrer les logs par service, niveau de log (info, warning, error), et par période.
 
+    2. Container Health Check Dashboard:
+Ce tableau de bord est centré sur les informations instantanées sur la santé des conteneurs Docker. Les données sont mises à jour toutes les minutes pour offrir une vue en temps réel de l'état des services.
+    3. Container Health Check History Dashboard
+Ce tableau de bord fournit une vue historique des informations de santé des conteneurs pour identifier des tendances sur une période prolongée. Il est utile pour détecter des anomalies ou des patterns récurrents dans les performances des services.
 
 4. **Authentification** :
 L'authentification est cruciale pour sécuriser l'accès aux données sensibles contenues dans les logs.
 
-- Contrôle d'accès : Mise en place de mécanismes d'authentification (comme LDAP, Active Directory, ou OAuth) pour vérifier l'identité des utilisateurs.
-- Autorisation : Configuration de rôles et de permissions pour contrôler ce que chaque utilisateur peut voir et faire dans le système.
-- Audit : Enregistrement des accès et des actions des utilisateurs pour des fins de sécurité et de conformité.
+- REFCONTACT user: utilisateurs à accès de lecture seule
+- Elastic user: utilisateur par défaut de elastic (superadmin)
 
-
+Pour modifier les mots de passes de elastic et REFCONTACT: 
+    - modification du mot de passe de elastic: modifier la variable d'environnement ELASTIC_PASSWORD dans le contenaire de elasticsearch au sein du docker compose. Il faudrait aussi modifier l'image de fluentd; dans le fichier fluent.conf dans la section match, remplacer le mot de passe de elasticpar le nouveau mot de passe. On pourra définir une variable d'environnement au sein de fluentd pour une mise à jour optimale à travers le docker compose.
+    - modification du mot de passe de REFCONTACT: naviger vers le fichier entrypoint.sh de kibana et modifier le mot de passe soit de facon directe soit à travers une variable d'environnement. 
+    -> Mettre à jour les tags des nouvelles images dans le docker compose.
+    -> Faire attention de ne pas modifier le mot de passe de kibana_system. Dans le cas échéant: modifier le mot de passe dans les variables de elasticsearch, le modifier dans le fichier kibana.yml et dans le fichier entrypoint.sh de kibana. 
 5. **Alertes** :
 Le système d'alertes permet une surveillance proactive de l'infrastructure et des applications.
 
