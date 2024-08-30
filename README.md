@@ -56,6 +56,8 @@ Ce tableau de bord est centré sur les informations instantanées sur la santé 
     3. Container Health Check History Dashboard
 Ce tableau de bord fournit une vue historique des informations de santé des conteneurs pour identifier des tendances sur une période prolongée. Il est utile pour détecter des anomalies ou des patterns récurrents dans les performances des services.
 
+**Toutes les informations relatives auw utilisateurs, dashboards, index ou alertes et connecteurs sont enregistrés sous la section "saved objects" des paramètres de kibana. Toute modification de l'un des paramètres requière une exportation de tous les objets et remplacement du fichier export.ndjson dans l'emplacement correspondant dans l'image de kibana.**
+
 4. **Authentification** :
 L'authentification est cruciale pour sécuriser l'accès aux données sensibles contenues dans les logs.
 
@@ -66,39 +68,37 @@ Pour modifier les mots de passes de elastic et REFCONTACT:
     - modification du mot de passe de elastic: modifier la variable d'environnement ELASTIC_PASSWORD dans le contenaire de elasticsearch au sein du docker compose. Il faudrait aussi modifier l'image de fluentd; dans le fichier fluent.conf dans la section match, remplacer le mot de passe de elasticpar le nouveau mot de passe. On pourra définir une variable d'environnement au sein de fluentd pour une mise à jour optimale à travers le docker compose.
     - modification du mot de passe de REFCONTACT: naviger vers le fichier entrypoint.sh de kibana et modifier le mot de passe soit de facon directe soit à travers une variable d'environnement. 
     -> Mettre à jour les tags des nouvelles images dans le docker compose.
-    -> Faire attention de ne pas modifier le mot de passe de kibana_system. Dans le cas échéant: modifier le mot de passe dans les variables de elasticsearch, le modifier dans le fichier kibana.yml et dans le fichier entrypoint.sh de kibana. 
+    -> Faire attention de ne pas modifier le mot de passe de kibana_system puisqu'il sert de correspondance entre kibana et elasticsearch. Dans le cas échéant: modifier le mot de passe dans les variables de elasticsearch, le modifier dans le fichier kibana.yml et dans le fichier entrypoint.sh de kibana. 
+
 5. **Alertes** :
 Le système d'alertes permet une surveillance proactive de l'infrastructure et des applications.
 
 - Définition de seuils : Configuration de seuils pour différentes métriques (utilisation CPU, mémoire, erreurs dans les logs, etc.).
-- Notifications par e-mail : Envoi automatique d'e-mails lorsque ces seuils sont dépassés ou lorsque des patterns spécifiques sont détectés dans les logs.
-- Personnalisation : Possibilité de définir différents niveaux d'alerte et de personnaliser le contenu des notifications.
-- Intégration : Potentielle intégration avec d'autres systèmes de notification (comme Slack, PagerDuty, etc.) pour une réponse rapide aux incidents.
+- Le service d'alerte requière un abonnement elastic pour pouvoir l'activer.
+- La configuration du connecteur email requière une configuration d'une nouvelle adresse sans nécéssité de tenantID ni clientID .
+
+6. **Frontend** :
+Intégration du front end à pour but de faciliter l'accès aux dashboard. L'interface principale d'accès au stack est cette page accessible sur le port 81 du localhost. 
+pour changer le port, il faudrait modifier la configuration de nginx au sein de l'image de kibana.
 
 
 Cette architecture multi-niveaux permet une gestion complète du cycle de vie des logs, de leur collecte à leur analyse, tout en assurant la sécurité et la surveillance proactive du système. Chaque niveau joue un rôle spécifique et crucial dans la chaîne de traitement des logs, offrant une solution robuste et flexible pour la gestion des logs dans un environnement complexe.
 
 ![Architecture Diagram](images/architecture-globale.png)
 
-## Configuration et installation
-(Inclure les étapes de configuration de l'environnement, de Fluentd, Elasticsearch et Kibana)
+## Intégration du Stack
+1. Copier les parties elasticsearch, fluentd, et kibana dans le docker compose en question.
+2. Dans la section relative à chaque service ajouter le code suivant:
+ ```bash
+ logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.nom_du_service
+```
 
-## Utilisation
-(Fournir des instructions sur l'utilisation du système, l'accès aux tableaux de bord et l'interprétation des données)
+## Liens utiles et présentations
+1. Présentation du projet détaillée: https://www.canva.com/design/DAGOqFW9_fU/V7_Am_70Cd_gv0oP-Cfpkg/edit?utm_content=DAGOqFW9_fU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
-## Configuration des alertes
-- Des alertes d'utilisation du CPU et de la mémoire sont configurées
-- Les alertes sont envoyées par e-mail lorsque les seuils sont dépassés
-- Des alertes supplémentaires peuvent être configurées pour Elasticsearch et Kibana afin de prévenir les surcharges ou les défaillances de logging
-
-## Défis et intégration
-(Décrire les défis rencontrés lors de l'implémentation et comment ils ont été surmontés)
-
-## Améliorations futures
-(Lister les améliorations potentielles ou les fonctionnalités prévues pour les itérations futures)
-
-## Contributeurs
-- NOURHENE AZAIEZ
-
-## Licence
-(Spécifier la licence sous laquelle ce projet est publié)
+2. Présentation Prezi (pour présentation): https://prezi.com/view/qBZZQxApQOUOUufkHywT/
+3. Page Notion qui contient un résumé détaillé des documentations des technologies et des ressources utilisées: https://grape-sunspot-20a.notion.site/Internship-d290b945ffab4afe9ced7a6735730d48?pvs=4
