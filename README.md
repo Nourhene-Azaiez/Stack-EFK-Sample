@@ -96,6 +96,7 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
         fluentd-address: localhost:24224
         tag: docker.nom_du_service
 ```
+
 ## Résultats obtenus
     1.**Service Logs Dashboard:**
     ![Service Logs Dashboard](images/11.png)
