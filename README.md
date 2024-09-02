@@ -94,8 +94,7 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
       driver: fluentd
       options:
         fluentd-address: localhost:24224
-        tag: docker.nom_du_service
-```
+        tag: docker.nom_du_service```
 
 ## Résultats obtenus
     **Service Logs Dashboard:**
