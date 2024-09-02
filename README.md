@@ -86,15 +86,6 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
 
 ![Architecture Diagram](images/architecture-globale.png)
 
-## Intégration du Stack
-1. Copier les parties elasticsearch, fluentd, et kibana dans le docker compose en question.
-2. Dans la section relative à chaque service ajouter le code suivant:
- ```bash
- logging:
-      driver: fluentd
-      options:
-        fluentd-address: localhost:24224
-        tag: docker.nom_du_service```
 
 ## Résultats obtenus
     **Service Logs Dashboard:**
@@ -108,6 +99,17 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
     ![Container Health Check History Dashboard](images/31.png)
     ![Container Health Check History Dashboard](images/32.png)
     ![Container Health Check History Dashboard](images/33.png)
+    
+## Intégration du Stack
+1. Copier les parties elasticsearch, fluentd, et kibana dans le docker compose en question.
+2. Dans la section relative à chaque service ajouter le code suivant:
+ ```bash
+ logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.nom_du_service
+```
     
 ## Liens utiles et présentations
 1. Présentation du projet détaillée: https://www.canva.com/design/DAGOqFW9_fU/V7_Am_70Cd_gv0oP-Cfpkg/edit?utm_content=DAGOqFW9_fU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
