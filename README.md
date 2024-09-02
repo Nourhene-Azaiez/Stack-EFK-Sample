@@ -102,13 +102,13 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
     ![Service Logs Dashboard](images/11.png)
     ![Service Logs Dashboard](images/12.png)
     **Container Health Check Dashboard:**
-    ![Service Logs Dashboard](images/21.png)
-    ![Service Logs Dashboard](images/22.png)
-    ![Service Logs Dashboard](images/23.png)
+    ![Container Health Check Dashboard](images/21.png)
+    ![Container Health Check Dashboard](images/22.png)
+    ![Container Health Check Dashboard](images/23.png)
     **Container Health Check History Dashboard**
-    ![Service Logs Dashboard](images/31.png)
-    ![Service Logs Dashboard](images/32.png)
-    ![Service Logs Dashboard](images/33.png)
+    ![Container Health Check History Dashboard](images/31.png)
+    ![Container Health Check History Dashboard](images/32.png)
+    ![Container Health Check History Dashboard](images/33.png)
     
 ## Liens utiles et présentations
 1. Présentation du projet détaillée: https://www.canva.com/design/DAGOqFW9_fU/V7_Am_70Cd_gv0oP-Cfpkg/edit?utm_content=DAGOqFW9_fU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
