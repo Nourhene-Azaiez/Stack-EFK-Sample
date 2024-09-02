@@ -88,17 +88,17 @@ Cette architecture multi-niveaux permet une gestion complète du cycle de vie de
 
 
 ## Résultats obtenus
-    **Service Logs Dashboard:**
-    ![Service Logs Dashboard](images/11.png)
-    ![Service Logs Dashboard](images/12.png)
-    **Container Health Check Dashboard:**
-    ![Container Health Check Dashboard](images/21.png)
-    ![Container Health Check Dashboard](images/22.png)
-    ![Container Health Check Dashboard](images/23.png)
-    **Container Health Check History Dashboard**
-    ![Container Health Check History Dashboard](images/31.png)
-    ![Container Health Check History Dashboard](images/32.png)
-    ![Container Health Check History Dashboard](images/33.png)
+**Service Logs Dashboard:**
+![Service Logs Dashboard](images/11.png)
+![Service Logs Dashboard](images/12.png)
+**Container Health Check Dashboard:**
+![Container Health Check Dashboard](images/21.png)
+![Container Health Check Dashboard](images/22.png)
+![Container Health Check Dashboard](images/23.png)
+**Container Health Check History Dashboard**
+![Container Health Check History Dashboard](images/31.png)
+![Container Health Check History Dashboard](images/32.png)
+![Container Health Check History Dashboard](images/33.png)
     
 ## Intégration du Stack
 1. Copier les parties elasticsearch, fluentd, et kibana dans le docker compose en question.
