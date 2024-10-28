@@ -131,8 +131,7 @@ services:
 
   kibana:
     container_name: kibana
-    image: registry.gitlab.tech.orange/win/owf/rfk/efk-config-utils/develop:ed00a1ed
-    # build: ./kibana # used for debuging and testing
+    build: ./kibana
     restart: always
     ports: 
       - 5601:5601
@@ -161,15 +160,3 @@ networks:
    driver: bridge
   app:
    driver: bridge
-# docker_networks:
-#   - clusternetwork
- 
-# docker_healthcheck:
-#   test: ["CMD", "curl", "-f", "http://localhost:5601/status"]
-#   timeout: 2s
-#   retries: 5
-# docker_deploy_replicas: ${DOCKER_DEPLOY_REPLICAS}
-# traefik_enable: false
-# # traefik_path_prefix: /api/v2
-# # traefik_review_path_strip: true
-# # traefik_priority: 99
